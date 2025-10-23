@@ -91,7 +91,7 @@ void app_main(void)
     while (1) {
        // printf("cnt: %d\n", cnt++);
        cnt++;
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        vTaskDelay(pdMS_TO_MS(1000));
         gpio_set_level(GPIO_NUM_18, cnt % 2);
         gpio_set_level(GPIO_NUM_19, cnt % 2);
     }
