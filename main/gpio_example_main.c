@@ -9,7 +9,7 @@
    as possible. This is the recommended approach.
    One thing that was strange is function esp_err_t gpio_pullup_en(gpio_num_t gpio_num)
    did not enable pullup on pin 4 as that pin should be pulled up to vcc but wasn't.
-   I instead 
+ 
 */
 #include <stdio.h>
 #include <string.h>
@@ -34,12 +34,14 @@
 static const char *TAG = "GPIO";
 static QueueHandle_t gpio_evt_queue = NULL;
 
+//interrupt handler
 static void IRAM_ATTR gpio_isr_handler(void* arg)
 {
     uint32_t gpio_num = (uint32_t) arg;
     xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
 }
 
+//gpio task communicates with isr
 static void gpio_task_example(void* arg)
 {
     uint32_t io_num;
@@ -74,7 +76,7 @@ void app_main(void)
     gpio_intr_enable(GPIO_NUM_4);
     gpio_intr_enable(GPIO_NUM_5);
    
-   // gpio_pullup_en(GPIO_NUM_4);
+   // gpio_pullup_en(GPIO_NUM_4); //didnt work
     gpio_set_pull_mode(GPIO_NUM_5,GPIO_PULLUP_ONLY);
    // gpio_pullup_en(GPIO_NUM_5);
     gpio_set_pull_mode(GPIO_NUM_4,GPIO_PULLUP_ONLY);
